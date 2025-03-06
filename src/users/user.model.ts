@@ -8,6 +8,9 @@ export class User {
     @Column({ type: "varchar", unique: true, nullable: false })
     email!: string;
 
+    @Column({ type: "varchar", unique: true, nullable: false })
+    username!: string;
+
     @Column({ type: "varchar", nullable: false, select: false }) // Exclude by default
     passwordHash: string;
 
@@ -23,8 +26,9 @@ export class User {
     @Column({ type: "varchar", nullable: false })
     role: string;
 
-    constructor(email: string, passwordHash: string, title: string, firstName: string, lastName: string, role: string) {
+    constructor(email: string, username: string,passwordHash: string, title: string, firstName: string, lastName: string, role: string) {
         this.email = email;
+        this.username = username;
         this.passwordHash = passwordHash;
         this.title = title;
         this.firstName = firstName;

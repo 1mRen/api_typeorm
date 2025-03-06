@@ -8,7 +8,7 @@ dotenv.config(); // Load environment variables from .env
 
 const { DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME } = process.env;
 
-export const AppDataSource = new DataSource({
+export const db = new DataSource({
     type: "mysql",
     host: DB_HOST,
     port: Number(DB_PORT),
@@ -35,7 +35,7 @@ async function initializeDatabase() {
         console.log(`✅ Database '${DB_NAME}' is ready.`);
 
         // Initialize TypeORM DataSource
-        await AppDataSource.initialize();
+        await db.initialize();
         console.log(" TypeORM Data Source has been initialized!");
     } catch (error) {
         console.error(" Database initialization failed:", error);
