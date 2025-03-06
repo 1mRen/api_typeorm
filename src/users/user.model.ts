@@ -1,9 +1,9 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
-
+import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import {v4} from 'uuid';
 @Entity({ name: "users" }) // Table name
 export class User {
-    @PrimaryGeneratedColumn('increment')
-    id!: number;
+    @PrimaryGeneratedColumn('uuid')
+    id!: string;
 
     @Column({ type: "varchar", length: 255, unique: true, nullable: false })
     email!: string;
@@ -26,8 +26,13 @@ export class User {
     @Column({ type: "varchar", length: 20, nullable: false })
     role: string;
 
+    @CreateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP" })
+    createdAt!: Date;
 
-    constructor(email: string, username: string,passwordHash: string, title: string, firstName: string, lastName: string, role: string) {
+    @UpdateDateColumn({ type: "timestamp", default: () => "CURRENT_TIMESTAMP", onUpdate: "CURRENT_TIMESTAMP" })
+    updatedAt!: Date;
+
+    constructor(email: string, username: string, passwordHash: string, title: string, firstName: string, lastName: string, role: string) {
         this.email = email;
         this.username = username;
         this.passwordHash = passwordHash;

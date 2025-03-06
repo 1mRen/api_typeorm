@@ -21,5 +21,5 @@ app.use(errorHandler);
 app.use('/users', usersController); // ✅ Importing it properly
 
 app.listen(port, () => {
-    console.log(`🚀 Server is running on port ${port}`);
+    console.log(` Server is running on port ${port}`);
 });

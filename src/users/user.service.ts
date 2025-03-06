@@ -1,4 +1,5 @@
 import bcrypt from 'bcryptjs';
+import { v4 as uuidv4 } from 'uuid'; // Import UUID generator
 import { db } from '../_helpers/db';
 import { User } from '../users/user.model';
 import { Repository } from 'typeorm';
@@ -17,7 +18,7 @@ async function getAll(): Promise<User[]> {
   return await userRepository.find();
 }
 
-async function getById(id: number): Promise<User> {
+async function getById(id: string): Promise<User> {  // Change id type to string (UUID)
   return await getUser(id);
 }
 
@@ -25,20 +26,33 @@ interface CreateUserParams {
   email: string;
   password: string;
   username?: string;
-  [key: string]: any;
+  title: string;
+  firstName: string;
+  lastName: string;
+  role: string;
 }
 
 async function create(params: CreateUserParams): Promise<void> {
+  // Check if email already exists
   if (await userRepository.findOne({ where: { email: params.email } })) {
     throw new Error(`Email "${params.email}" is already registered`);
   }
 
-  const user = userRepository.create(params);
-  user.passwordHash = await bcrypt.hash(params.password, 10);
+  // Hash password before saving
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(params.password, salt);
+
+  // Create new user
+  const user = userRepository.create({
+    id: uuidv4(),  // Generate UUID v4 for ID
+    ...params,
+    passwordHash: hashedPassword, // Store hashed password
+  });
+
   await userRepository.save(user);
 }
 
-async function update(id: number, params: Partial<CreateUserParams>): Promise<void> {
+async function update(id: string, params: Partial<CreateUserParams>): Promise<void> {
   const user = await getUser(id);
 
   const usernameChanged = params.username && user.username !== params.username;
@@ -46,20 +60,22 @@ async function update(id: number, params: Partial<CreateUserParams>): Promise<vo
     throw new Error(`Username "${params.username}" is already taken`);
   }
 
+  // Hash new password if provided
   if (params.password) {
-    params.passwordHash = await bcrypt.hash(params.password, 10);
+    const salt = await bcrypt.genSalt(10);
+    params.password = await bcrypt.hash(params.password, salt);
   }
 
   Object.assign(user, params);
   await userRepository.save(user);
 }
 
-async function _delete(id: number): Promise<void> {
+async function _delete(id: string): Promise<void> {
   const user = await getUser(id);
   await userRepository.remove(user);
 }
 
-async function getUser(id: number): Promise<User> {
+async function getUser(id: string): Promise<User> {
   const user = await userRepository.findOne({ where: { id } });
   if (!user) throw new Error('User not found');
   return user;
