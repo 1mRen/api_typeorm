@@ -65,4 +65,6 @@ temp/
 *.ntvs*
 *.njsproj
 *.sln
+
 *.sw?
+
