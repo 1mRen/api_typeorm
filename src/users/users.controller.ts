@@ -1,5 +1,5 @@
 import express, { Request, Response, NextFunction } from 'express';
-import Joi from 'joi';
+import Joi, { string } from 'joi';
 import { validateRequest } from '../_middleware/validate-request';
 import { Role } from '../_helpers/role';
 import { userService } from './user.service';
@@ -27,7 +27,7 @@ async function getAll(req: Request, res: Response, next: NextFunction) {
 
 async function getById(req: Request, res: Response, next: NextFunction) {
   try {
-    const user = await userService.getById(Number(req.params.id));
+    const user = await userService.getById((req.params.id));
     res.json(user);
   } catch (error) {
     next(error);
@@ -45,7 +45,7 @@ async function create(req: Request, res: Response, next: NextFunction) {
 
 async function update(req: Request, res: Response, next: NextFunction) {
   try {
-    await userService.update(Number(req.params.id), req.body);
+    await userService.update((req.params.id), req.body);
     res.json({ message: 'User updated successfully' });
   } catch (error) {
     next(error);
@@ -54,7 +54,7 @@ async function update(req: Request, res: Response, next: NextFunction) {
 
 async function _delete(req: Request, res: Response, next: NextFunction) {
   try {
-    await userService.delete(Number(req.params.id));
+    await userService.delete((req.params.id));
     res.json({ message: 'User deleted successfully' });
   } catch (error) {
     next(error);
