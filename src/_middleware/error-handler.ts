@@ -4,7 +4,7 @@ export function errorHandler(
     err: unknown,
     req: Request,
     res: Response,
-    next: NextFunction // ✅ Explicitly define `next` but don't return anything
+    next: NextFunction
 ): void {
     if (typeof err === "string") {
         const is404 = err.toLowerCase().endsWith("not found");

@@ -16,7 +16,7 @@ export const db = new DataSource({
     password: DB_PASSWORD,
     database: DB_NAME,
     entities: [User], // Register User entity
-    synchronize: true, // Auto-create tables (disable in production)
+    synchronize: true, 
     logging: true,
 });
 
