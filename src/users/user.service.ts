@@ -1,5 +1,5 @@
 import bcrypt from 'bcryptjs';
-import { v4 as uuidv4 } from 'uuid'; // Import UUID generator
+import { v4 as uuidv4 } from 'uuid'; 
 import { db } from '../_helpers/db';
 import { User } from '../users/user.model';
 import { Repository } from 'typeorm';
@@ -18,7 +18,7 @@ async function getAll(): Promise<User[]> {
   return await userRepository.find();
 }
 
-async function getById(id: string): Promise<User> {  // Change id type to string (UUID)
+async function getById(id: string): Promise<User> {  
   return await getUser(id);
 }
 

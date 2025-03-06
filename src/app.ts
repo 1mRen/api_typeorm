@@ -4,11 +4,11 @@ import helmet from 'helmet';
 import cors from 'cors';
 import 'reflect-metadata';
 import { errorHandler } from "./_middleware/error-handler";
-import usersController from './users/users.controller'; // ✅ Import instead of require
+import usersController from './users/users.controller'; 
 
 dotenv.config(); // Load environment variables
 
-const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 4000; // ✅ Provide a default value
+const port = process.env.PORT ? parseInt(process.env.PORT, 10) : 4000; 
 const app = express();
 
 app.use(express.json());
@@ -18,7 +18,7 @@ app.use(helmet());
 app.use(errorHandler);
 
 // API Routes
-app.use('/users', usersController); // ✅ Importing it properly
+app.use('/users', usersController); 
 
 app.listen(port, () => {
     console.log(` Server is running on port ${port}`);
